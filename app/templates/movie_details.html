@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ movie_info.title }} - 详情</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <!-- Plotly.js -->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- Custom JS -->
+  <script src="../static/js/showImage.js"></script>
+  <script src="../static/js/chart.js"></script>
+  <!-- Custom Styles -->
+  <style>
+    /* Add some custom CSS styles */
+    .legend {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .legend-box {
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+    }
+
+    /* Set the maximum size of the movie poster image */
+    img {
+      max-width: 100%;
+      max-height: 500px;
+    }
+
+    /* Set the size of the movie poster column */
+    .col-md-6.poster-column {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    /* Set the size of the pie chart canvas */
+    #myCanvas {
+      max-width: 100%;
+      height: auto;
+      display: flex;
+      margin: 0 auto;
+    }
+
+    /* Restrict the width of the legend container */
+    #legend {
+      max-width: 350px;
+      margin-left: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* Set the maximum size of the movie still image */
+    #image {
+      max-width: 100%;
+      max-height: 500px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <!-- Movie poster column -->
+      <div class="col-md-6 poster-column">
+        <h1>{{ movie_info.title }}</h1>
+        <img src="../static/pictures/{{ movie_info.id }}.jpg" alt="{{ movie_info.title }}"
+             class="img-responsive center-block">
+      </div>
+      <!-- Movie rating column -->
+      <div class="col-md-6 text-center">
+        <div style="display: flex;">
+          <canvas id="myCanvas" width="400" height="400" class="mx-auto d-block"></canvas>
+          <div id="legend" class="text-left">
+            {% for i in range(5, 0, -1) %}
+              <div class="legend">
+                <div class="legend-box" style="background-color: hsl({{ (i - 1) * 50 }}, 70%, 50%);"></div>
+                <div>{{ i }}星</div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+        <img id="image" src="" alt="" style="margin-top: 20px;">
+      </div>
+    </div>
+    <!-- Hidden input field to store movie ID -->
+    <input type="hidden" id="movie_id" value="{{ movie_info.id }}">
+    <!-- JavaScript code -->
+    <script>
+      // Get the movie ID from the template variable
+      const movieId = "{{ movie_info.id }}";
+      // Pass the percentage array as a parameter to the JavaScript file
+      const percentages = {{ movie_info.rate | tojson }};
+      // Call the drawPieChart function to create the chart
+      drawPieChart(percentages);
+    </script>
+  </div>
+</body>
+</html>

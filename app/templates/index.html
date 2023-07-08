@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>豆瓣电影一周口碑榜</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+      .thumbnail {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.2s ease-in-out;
+      }
+      .thumbnail:hover img {
+        transform: scale(1.2);
+      }
+      .thumbnail:hover .caption {
+        transform: translateY(-50%);
+      }
+      .thumbnail img {
+        transition: all 0.2s ease-in-out;
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+      }
+      .thumbnail .caption {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        color: #fff;
+        padding: 10px;
+        transform: translateY(100%);
+        transition: all 0.2s ease-in-out;
+      }
+      .thumbnail .rank {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.5);
+        color: #000;
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+        line-height: 100%;
+        padding-top: 20%;
+        opacity: 0;
+        transition: all 0.2s ease-in-out;
+      }
+      .thumbnail:hover .rank {
+        opacity: 0.5;
+      }
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .col-md-3 {
+        width: calc(100% / 4);
+        margin-bottom: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-default">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">豆瓣电影</a>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#">首页</a></li>
+          <li><a href="#">电影</a></li>
+          <li><a href="#">电视剧</a></li>
+          <li><a href="#">综艺</a></li>
+        </ul>
+      </div>
+    </nav>
+    <div class="container">
+      <h1 class="page-header">豆瓣电影一周口碑榜</h1>
+      <div class="row">
+        {% for movie in movie_list %}
+          <div class="col-md-3">
+            <div class="thumbnail">
+              <a href="{{ url_for('movie_details', movie_id=movie.id) }}">
+                <div class="rank">{{ loop.index }}</div>
+                <img src="../static/pictures/{{ movie.id }}.jpg" alt="{{ movie.title }}" class="img-responsive">
+                <div class="caption">
+                  <h4>{{ movie.title }}</h4>
+                  <p>{{ movie.score }}</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    <footer class="footer">
+      <div class="container">
+        <p class="text-muted">© 2023 豆瓣电影</p>
+      </div>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </body>
+</html>
